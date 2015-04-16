@@ -2,683 +2,143 @@ FORMAT: 1A
 HOST: http://polls.apiblueprint.org/
 
 # Hammer API
+Hammer API
 
+## Group Jobs
+A job contains the following information
++ names
++ schedule
++ filters
 
---
-#Alerts
-Alert Search for organisations and data
---
+## Create, Retrieve, Update, Delete [/jobs
+Some information
 
--- 
-/Alerts/Search
++ Parameters
+    + job_id (optional, string, `google`) ... Unique job id
 
-Gets the latest fleet and organisation data alerts ordered by Publish(ed)Date
-The list is filtered based on the user's entitlements.
+### Update [POST]
 
-**Request**
++ Response 200 (application/json)
 
-* `apiToken`: The API token of the user making the request
-* `text`: Search Term
-* `skip`: For paging, allows you to define the number of items to skip in the results
-* `take`: For paging, allows you to define the size of the page
-* `earliestDate`: Gets alerts after this date time (inclusive)
-* `latestDate`: Gets alerts before this date time (inclusive), paging is filtered past this date
-* `organisationId`: Gets alerts for a specific organisation
-* `organisationType`: Gets Data Alerts for a Specific Organisation Type  `Airline` `Mro` `Airport`
-* `alertTypes`: Get Alerts for specific alert types see `Delivery` `OrganisationStatusAlert` `OrganisationFleetAlert` `OrganisationPersonnelAlerts` `OrganisationFinanceAlert` `OrganisationTrafficAlert`
-
-**Response**
-* `AlertsSearch`
-    * `TotalResults` : Total Alerts
-    * `OrganisationFleetAlerts`: List of fleet  alerts
-        * `Total` : Total Fleet Alerts
-        * `Results`: List of alerts
-            * `Type` : The type of event `Order`, `Delivery` etc
-            * `SubType` : The sub-category of Type `New Order` etc
-            * `AircraftCount` : The number of aircraft affected by the event
-            * `EventDate`: The date and time of the event, in ISO 8601 format
-            * `PublishedDate`: The date and time of the publishing of the event, in ISO 8601 format
-            * `ManagerOrganisationId` : The identifier of the Organisation
-            * `ManagerOrganisationName` : The managing Organisation
-            * `ManagerOrganisationUrl`: The Manager Organisation URL
-            * `OperatorId`: The Operator Id
-            * `OperatorName`: The Operator Name
-            * `OperatorUrl`: The Operator Url
-            * `Builder` : The aircraft builder
-            * `Series` : The aircraft series
-            * `EngineType` : The engine type
-            * `DeliveryDate`: Expected delivery date if `Type` is an `Order`
-            * `NaturalLanguage` : A natural language description of the alert
-            * `Enrichments` : A list of entities identified in the natural language description
-                * `TargetText` : The name of the entity identified
-                * `OrganisationId` : The Id of the entity's organisation
-                * `Iata` : The Iata code for the entity
-                * `EnrichmentType` : The method of enrichment `Airline`, `Airport` etc
-                * `HasFleets` : Identifies that the entity has fleets
-                * `HasRoutes` : Identifies that the entity has routes
-                * `HasMroData` : Identifies that the entity has mro data
-                * `HasPersonnel` : Identifies that the entity has personnel
-                * `HasOwnership` : Identifies that the entity has ownership
-                * `HasAlliances` : Identifies that the entity has alliances
-                * `HasTraffic` : Identifies that the entity has traffic
-                * `HasFinancials` : Identifies that the entity has financials
-                * `HasAirlines` : Identifies that the entity has airlines
-                * `HasAircraft` : Identifies that the entity has aircraft
-                * `HasCapabilities` : Identifies that the entity has capabilities
-                * `HasClients` : Identifies that the entity has clients
-                * `HasMemberFinancials` : Identifies that the entity has member financials
-                * `HasMemberTraffic` : Identifies that the entity has member traffic
-                * `ContentIndices` : The number of occurences of the entity within the natural language, the number implies on what character the target text begins
-    * `OrganisationStatusAlerts`: List of organisation status alerts
-        * `Total` : Total Organisation Status Alerts
-        * `Results`: List of alerts
-            * `OrganisationId`: Unique Id for the Organisation
-            * `Title`: The title for the alert `New Start-up Announced` etc
-            * `FormedDate`: Organisation formed date
-            * `PublishedDate`: Date the alert was created
-            * `IsEstimated`: Whether this is an estimated `FormedDate`
-            * `OrganisationName`: Short name of the Organisation
-            * `OrganisationUrl` : The Organisation's primary url
-            * `OrganisationAlertType`: Organisation alert type can be one of: `NewStartupAnnounced`, `Ceased`, `Operating`, `Suspended`, `Merged`
-            * `ControllingOrganisationId`: Optional where `OrganisationAlertType` == `Merged` then this shows the unique identifier for the controlling organisation
-            * `ControllingOrganisationName`: Optional where `OrganisationAlertType` == `Merged` then this shows the short name of the controlling organisation
-            * `ControllingOrganisationUrl` : Optional where `OrganisationAlertType` == `Merged` then this shows the url of the controlling organisation
-            * `OrganisationType`: The Organisation type `Airline` etc
-            * `OrganisationSubType`: The Organisation sub type `Cargo`, `Low Cost` etc
-            * `NaturalLanguage` : A natural language description of the alert
-            * `Enrichments` : A list of entities identified in the natural language description
-                * `TargetText` : The name of the entity identified
-                * `OrganisationId` : The Id of the entity's organisation
-                * `Iata` : The Iata code for the entity
-                * `EnrichmentType` : The method of enrichment `Airline`, `Airport` etc
-                * `HasFleets` : Identifies that the entity has fleets
-                * `HasRoutes` : Identifies that the entity has routes
-                * `HasMroData` : Identifies that the entity has mro data
-                * `HasPersonnel` : Identifies that the entity has personnel
-                * `HasOwnership` : Identifies that the entity has ownership
-                * `HasAlliances` : Identifies that the entity has alliances
-                * `HasTraffic` : Identifies that the entity has traffic
-                * `HasFinancials` : Identifies that the entity has financials
-                * `HasAirlines` : Identifies that the entity has airlines
-                * `HasAircraft` : Identifies that the entity has aircraft
-                * `HasCapabilities` : Identifies that the entity has capabilities
-                * `HasClients` : Identifies that the entity has clients
-                * `HasMemberFinancials` : Identifies that the entity has member financials
-                * `HasMemberTraffic` : Identifies that the entity has member traffic
-                * `ContentIndices` : The number of occurences of the entity within the natural language, the number implies on what character the target text begins
-    * `OrganisationPersonnelAlerts`: List of organisation personnel alerts
-        * `Total` : Total personnel Alerts
-        * `Results` : List of alerts
-            * `OrganisationId`: Unique Id for the Organisation
-            * `OrganisationName`: Name of the Organisation
-            * `OrganisationUrl` : The Organisation's primary url
-            * `Title`: Title of the person
-            * `FirstName`: First name of the person
-            * `LastName`: Last name of the person
-            * `ActualJobTitle`: Job title of the person
-            * `EmployedFromDate`: Employed from date of the person
-            * `PublishedDate`: Date the alert was generated
-            * `PersonnelAlertType`: `PersonnelAdded`
-            * `NaturalLanguage` : A natural language description of the alert
-            * `Enrichments` : A list of entities identified in the natural language description
-                * `TargetText` : The name of the entity identified
-                * `OrganisationId` : The Id of the entity's organisation
-                * `Iata` : The Iata code for the entity
-                * `EnrichmentType` : The method of enrichment `Airline`, `Airport` etc
-                * `HasFleets` : Identifies that the entity has fleets
-                * `HasRoutes` : Identifies that the entity has routes
-                * `HasMroData` : Identifies that the entity has mro data
-                * `HasPersonnel` : Identifies that the entity has personnel
-                * `HasOwnership` : Identifies that the entity has ownership
-                * `HasAlliances` : Identifies that the entity has alliances
-                * `HasTraffic` : Identifies that the entity has traffic
-                * `HasFinancials` : Identifies that the entity has financials
-                * `HasAirlines` : Identifies that the entity has airlines
-                * `HasAircraft` : Identifies that the entity has aircraft
-                * `HasCapabilities` : Identifies that the entity has capabilities
-                * `HasClients` : Identifies that the entity has clients
-                * `HasMemberFinancials` : Identifies that the entity has member financials
-                * `HasMemberTraffic` : Identifies that the entity has member traffic
-                * `ContentIndices` : The number of occurences of the entity within the natural language, the number implies on what character the target text begins
-    * `OrganisationFinancialAlerts`: List of organisation financial alerts
-        * `Total` : Total financial Alerts
-        * `Results` : List of alerts
-            * `OrganisationId`: Unique Id for the Organisation
-            * `OrganisationName`: Name of the Organisation
-            * `OrganisationUrl` : The Organisation's primary url
-            * `AlertUrl` : The primary url for the alert
-            * `Year`: The Year of the financial update
-            * `Period`: `Q1` `Q2` `Q3` `Q4` `Annual`
-            * `PublishedDate`: Date the alert was generated
-            * `NaturalLanguage` : A natural language description of the alert
-            * `Enrichments` : A list of entities identified in the natural language description
-                * `TargetText` : The name of the entity identified
-                * `OrganisationId` : The Id of the entity's organisation
-                * `Iata` : The Iata code for the entity
-                * `EnrichmentType` : The method of enrichment `Airline`, `Airport` etc
-                * `HasFleets` : Identifies that the entity has fleets
-                * `HasRoutes` : Identifies that the entity has routes
-                * `HasMroData` : Identifies that the entity has mro data
-                * `HasPersonnel` : Identifies that the entity has personnel
-                * `HasOwnership` : Identifies that the entity has ownership
-                * `HasAlliances` : Identifies that the entity has alliances
-                * `HasTraffic` : Identifies that the entity has traffic
-                * `HasFinancials` : Identifies that the entity has financials
-                * `HasAirlines` : Identifies that the entity has airlines
-                * `HasAircraft` : Identifies that the entity has aircraft
-                * `HasCapabilities` : Identifies that the entity has capabilities
-                * `HasClients` : Identifies that the entity has clients
-                * `HasMemberFinancials` : Identifies that the entity has member financials
-                * `HasMemberTraffic` : Identifies that the entity has member traffic
-                * `ContentIndices` : The number of occurences of the entity within the natural language, the number implies on what character the target text begins
-    * `OrganisationTrafficAlerts`: List of organisation traffic alerts
-        * `Total` : Total traffic Alerts
-        * `Results` : List of alerts
-            * `OrganisationId`: Unique Id for the Organisation
-            * `OrganisationName`: Name of the Organisation
-            * `OrganisationUrl` : The Organisation's primary url
-            * `AlertUrl` : The primary url for the alert
-            * `Year`: The Year of the traffic update
-            * `Period`: `Annual` `January` `February` `March` `April `May` `June` `July` `August` `September` `October` `November` `December`
-            * `PublishedDate`: Date the alert was generated
-            * `NaturalLanguage` : A natural language description of the alert
-            * `Enrichments` : A list of entities identified in the natural language description
-                * `TargetText` : The name of the entity identified
-                * `OrganisationId` : The Id of the entity's organisation
-                * `Iata` : The Iata code for the entity
-                * `EnrichmentType` : The method of enrichment `Airline`, `Airport` etc
-                * `HasFleets` : Identifies that the entity has fleets
-                * `HasRoutes` : Identifies that the entity has routes
-                * `HasMroData` : Identifies that the entity has mro data
-                * `HasPersonnel` : Identifies that the entity has personnel
-                * `HasOwnership` : Identifies that the entity has ownership
-                * `HasAlliances` : Identifies that the entity has alliances
-                * `HasTraffic` : Identifies that the entity has traffic
-                * `HasFinancials` : Identifies that the entity has financials
-                * `HasAirlines` : Identifies that the entity has airlines
-                * `HasAircraft` : Identifies that the entity has aircraft
-                * `HasCapabilities` : Identifies that the entity has capabilities
-                * `HasClients` : Identifies that the entity has clients
-                * `HasMemberFinancials` : Identifies that the entity has member financials
-                * `HasMemberTraffic` : Identifies that the entity has member traffic
-                * `ContentIndices` : The number of occurences of the entity within the natural language, the number implies on what character the target text begins
-    * `NetworkAlerts`: List of network route alerts
-        * `Total` : Total network Alerts
-        * `Results` : List of alerts
-            * `RegionId`: Unique Id for the region 
-            * `Region`: Name of the region
-            * `AlertType` : The type of the alert
-            * `RouteCount`: The number of routes affected
-            * `CarrierCount`: The number of carriers affected
-            * `PublishedDate`: Date the alert was generated
-            * `NaturalLanguage` : A natural language description of the alert
-            * `Enrichments` : A list of entities identified in the natural language description
-                * `TargetText` : The name of the entity identified
-                * `OrganisationId` : The Id of the entity's organisation
-                * `Iata` : The Iata code for the entity
-                * `EnrichmentType` : The method of enrichment `Airline`, `Airport` etc
-                * `HasFleets` : Identifies that the entity has fleets
-                * `HasRoutes` : Identifies that the entity has routes
-                * `HasMroData` : Identifies that the entity has mro data
-                * `HasPersonnel` : Identifies that the entity has personnel
-                * `HasOwnership` : Identifies that the entity has ownership
-                * `HasAlliances` : Identifies that the entity has alliances
-                * `HasTraffic` : Identifies that the entity has traffic
-                * `HasFinancials` : Identifies that the entity has financials
-                * `HasAirlines` : Identifies that the entity has airlines
-                * `HasAircraft` : Identifies that the entity has aircraft
-                * `HasCapabilities` : Identifies that the entity has capabilities
-                * `HasClients` : Identifies that the entity has clients
-                * `HasMemberFinancials` : Identifies that the entity has member financials
-                * `HasMemberTraffic` : Identifies that the entity has member traffic
-                * `ContentIndices` : The number of occurences of the entity within the natural language, the number implies on what character the target text begins
---
-
-GET /v1/Alerts/Search?apiToken=00000000-0000-0000-0000-000000000001
-< 200
-< Content-Type: application/json
-{
-    "AlertsSearch": {
-        "TotalResults": 50,
-        "OrganisationFleetAlerts": {
-            "Total": 50,
-            "Results": [
                 {
-                    "Type": "Order",
-                    "SubType": "New Order",
-                    "AircraftCount": 1,
-                    "EventDate": "2013-04-25T23:00:00",
-                    "PublishedDate": "2013-04-28T18:24:08.107",
-                    "ManagerOrganisationId": "-605",
-                    "ManagerOrganisationName": "Emirates",
-                    "ManagerOrganisationUrl": null,
-                    "OperatorId": null,
-                    "OperatorName": null,
-                    "OperatorUrl": null,
-                    "Builder": "Airbus",
-                    "Series": "A320",
-                    "EngineType": "",
-                    "DeliveryDate": "2018-01-12T23:00:00",
-                    "NaturalLanguage": "Emirates has placed a new order for an Airbus A320 with engines, delivery expected in 2018",
-                    "Enrichments": [
+                    "name": "googlejob",
+                    "schedule": "2014-11-11T08:40:51.620Z",
+                    "filters": [
                         {
-                            "TargetText":"Emirates",
-                            "OrganisationId":-605,
-                            "Iata":"EK",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[0]
-                        }
-                    ]
-                },
-                {
-                    "Type": "Order",
-                    "SubType": "New Order",
-                    "AircraftCount": 50,
-                    "EventDate": "2013-04-25T23:00:00",
-                    "PublishedDate": "2013-04-28T18:24:08.107",
-                    "ManagerOrganisationId": "-11455",
-                    "ManagerOrganisationName": "Aegean Airlines",
-                    "OperatorId": null,
-                    "OperatorName": null,
-                    "OperatorUrl": null,
-                    "Builder": "Airbus",
-                    "Series": "A320neo",
-                    "EngineType": "PW1000G",
-                    "DeliveryDate": "2018-01-12T23:00:00",
-                    "NaturalLanguage": "Emirates has placed a new order for an Airbus A320 with engines, delivery expected in 2018",
-                    "Enrichments": [
-                        {
-                            "TargetText":"Emirates",
-                            "OrganisationId":-605,
-                            "Iata":"EK",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[0]
-                        }
-                    ]
-                },
-                {
-                    "Type": "OrderLoI",
-                    "SubType": "Order LoI",
-                    "AircraftCount": 1,
-                    "EventDate": "2013-04-24T23:00:00",
-                    "PublishedDate": "2013-04-27T17:30:55.843",
-                    "ManagerOrganisationId": "-456",
-                    "ManagerOrganisationName": "British Airways",
-                    "OperatorId": null,
-                    "OperatorName": null,
-                    "OperatorUrl": null,
-                    "Builder": "Airbus",
-                    "Series": "A380",
-                    "EngineType": "Trent 972-84",
-                    "DeliveryDate": "2020-01-13T23:00:00",
-                    "NaturalLanguage": "Emirates has placed a new order for an Airbus A320 with engines, delivery expected in 2018",
-                    "Enrichments": [
-                        {
-                            "TargetText":"Emirates",
-                            "OrganisationId":-605,
-                            "Iata":"EK",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[0]
-                        }
-                    ]
-                },
-                {
-                    "Type": "OrderLoI",
-                    "SubType": "Order LoI",
-                    "AircraftCount": 12,
-                    "EventDate": "2013-04-24T23:00:00",
-                    "PublishedDate": "2013-04-27T16:29:55.843",
-                    "ManagerOrganisationId": "-109",
-                    "ManagerOrganisationName": "Adria Airways",
-                    "OperatorId": -488,
-                    "OperatorName": "Cathay Pacific",
-                    "OperatorUrl": "http://dashboard.flightglobal.com/app/profiles/#/airline/summary/-488",
-                    "Builder": "Airbus",
-                    "Series": "A380",
-                    "EngineType": "Trent 972-84",
-                    "DeliveryDate": "2020-01-13T23:00:00",
-                    "NaturalLanguage": "Emirates has placed a new order for an Airbus A320 with engines, delivery expected in 2018",
-                    "Enrichments": [
-                        {
-                            "TargetText":"Emirates",
-                            "OrganisationId":-605,
-                            "Iata":"EK",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[0]
-                        }
-                    ]
-                },
-                {
-                    "Type": "Option",
-                    "SubType": "Option",
-                    "AircraftCount": 1,
-                    "EventDate": "2013-04-24T23:00:00",
-                    "PublishedDate": "2013-04-27T15:30:55.843",
-                    "ManagerOrganisationId": "-456",
-                    "ManagerOrganisationName": "British Airways",
-                    "OperatorId": -488,
-                    "OperatorName": "Cathay Pacific",
-                    "OperatorUrl": "http://dashboard.flightglobal.com/app/profiles/#/airline/summary/-488",
-                    "Builder": "Airbus",
-                    "Series": "A350",
-                    "EngineType": "Trent XWB",
-                    "DeliveryDate": "2020-01-13T23:00:00",
-                    "NaturalLanguage": "Emirates has placed a new order for an Airbus A320 with engines, delivery expected in 2018",
-                    "Enrichments": [
-                        {
-                            "TargetText":"Emirates",
-                            "OrganisationId":-605,
-                            "Iata":"EK",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[0]
+                            "name": "CarriersInc",
+                            "value": "BA,DL",
                         }
                     ]
                 }
-            ],
-        },
-        "OrganisationStatusAlerts": {
-            "Total": 60,
-            "Results": [
+
+### Retrieve [GET]
+
++ Response 200 (application/json)
+
                 {
-                    "OrganisationId": 1534107506,
-                    "Title": "New Start-up Announced!",
-                    "FormedDate": "2013-04-08T16:26:13.773",
-                    "PublishedDate": "2013-04-18T16:26:13.807",
-                    "IsEstimated": true,
-                    "OrganisationName": "Max Air",
-                    "OrganisationAlertType": "NewStartupAnnounced",
-                    "OrganisationType": "Airline",
-                    "OrganisationSubType": "Cargo",
-                    "NaturalLanguage": "Max Air has announced its intention to start up as a cargo airline",
-                    "Enrichments": []
-                },
-                {
-                    "OrganisationId": 528533052,
-                    "Title": "New Start-up Announced!",
-                    "FormedDate": "2013-04-08T15:29:19.367",
-                    "PublishedDate": "2013-04-18T15:29:19.367",
-                    "IsEstimated": false,
-                    "OrganisationName": "Max Air",
-                    "OrganisationAlertType": "Ceased",
-                    "OrganisationType": "Airline",
-                    "OrganisationSubType": "Cargo",
-                    "NaturalLanguage": "Max Air has announced its intention to start up as a cargo airline",
-                    "Enrichments": []
-                },
-                {
-                    "OrganisationId": 192316502,
-                    "Title": "New Start-up Announced!",
-                    "FormedDate": "2013-04-08T15:29:16.333",
-                    "PublishedDate": "2013-04-18T15:29:16.333",
-                    "IsEstimated": false,
-                    "OrganisationName": "Max Air",
-                    "OrganisationAlertType": "Operating",
-                    "OrganisationType": "Airline",
-                    "OrganisationSubType": "Cargo",
-                    "NaturalLanguage": "Max Air has announced its intention to start up as a cargo airline",
-                    "Enrichments": []
-                },
-                {
-                    "OrganisationId": 50979755,
-                    "Title": "New Start-up Announced!",
-                    "FormedDate": "2013-04-08T15:28:59.02",
-                    "PublishedDate": "2013-04-18T15:28:59.02",
-                    "IsEstimated": false,
-                    "OrganisationName": "Max Air",
-                    "OrganisationAlertType": "Suspended",
-                    "OrganisationType": "Airline",
-                    "OrganisationSubType": "Cargo",
-                    "NaturalLanguage": "Max Air has announced its intention to start up as a cargo airline",
-                    "Enrichments": []
-                },
-                {
-                    "OrganisationId": 1313949289,
-                    "Title": "New Start-up Announced!",
-                    "FormedDate": "2013-04-08T15:28:43.863",
-                    "PublishedDate": "2013-04-18T15:28:43.863",
-                    "IsEstimated": false,
-                    "OrganisationName": "Max Air",
-                    "OrganisationAlertType": "NewStartupAnnounced",
-                    "OrganisationType": "Airline",
-                    "OrganisationSubType": "Regional",
-                    "NaturalLanguage": "Max Air has announced its intention to start up as a cargo airline",
-                    "Enrichments": []
-                }
-            ]
-        },
-        "OrganisationPersonnelAlerts": {
-            "Total": 600,
-            "Results": [
-                {
-                    "OrganisationId": 123456,
-                    "OrganisationName": "British Airways",
-                    "Title": "Mr",
-                    "FirstName": "Tom",
-                    "LastName": "Jones",
-                    "ActualJobTitle": "Chief Exec Officer",
-                    "EmployedFromDate": "2013-10-30T00:00:00",
-                    "PublishedDate": "2013-10-30T00:00:00",
-                    "PersonnelAlertType": "PersonnelAdded",
-                    "NaturalLanguage" : "Mr Tom Jones has been hired by British Airways as Chief Exec Officer",
-                    "Enrichments" : [
+                    "name": "googlejob",
+                    "schedule": "2014-11-11T08:40:51.620Z",
+                    "filters": [
                         {
-                            "TargetText":"British Airways",
-                            "OrganisationId":-456,
-                            "Iata":"BA",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[31]
+                            "name": "CarriersInc",
+                            "value": "BA,DL",
                         }
                     ]
                 }
-            ]
-        },
-        "OrganisationFinancialAlerts": {
-            "Total": 3,
-            "Results": [
+                
+## Group /jobs/list
+## List [/jobs/list]
+### List [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
                 {
-                    "OrganisationId": 123456,
-                    "OrganisationName": "British Airways",
-                    "OrganisationUrl": "http://dashboard.flightglobal.com",
-                    "AlertUrl": "http://pro.flightglobal.com",
-                    "Year": 2014,
-                    "Period": "Annual",
-                    "PublishedDate": "2014-10-30T00:00:00",
-                    "NaturalLanguage": "2014 financial update for British Airways released",
-                    "Enrichments" : [
+                    "name": "googlejob",
+                    "schedule": "2014-11-11T08:40:51.620Z",
+                    "filters": [
                         {
-                            "TargetText":"British Airways",
-                            "OrganisationId":-456,
-                            "Iata":"BA",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[26]
-                        }
-                    ]
-                },
-                {
-                    "OrganisationId": 123457,
-                    "OrganisationName": "British Airways",
-                    "OrganisationUrl": "http://dashboard.flightglobal.com",
-                    "AlertUrl": "http://pro.flightglobal.com",
-                    "Year": 2013,
-                    "Period": "Q4",
-                    "PublishedDate": "2014-10-30T00:00:00",
-                    "NaturalLanguage": "2014 financial update for British Airways released",
-                    "Enrichments" : [
-                        {
-                            "TargetText":"British Airways",
-                            "OrganisationId":-456,
-                            "Iata":"BA",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[26]
+                            "name": "CarriersInc",
+                            "value": "BA,DL",
                         }
                     ]
                 }
-            ]
-        },
-        "OrganisationTrafficAlerts": {
-            "Total": 1,
-            "Results": [
+            ]                
+                
+
+## Choice [/questions/{question_id}/choices/{choice_id}]
+
++ Parameters
+    + question_id (required, number, `1`) ... ID of the Question in form of an integer
+    + choice_id (required, number, `1`) ... ID of the Choice in form of an integer
+
+### Vote on a Choice [POST]
+
+This action allows you to vote on a question's choice.
+
++ Response 201
+
+    + Headers
+
+            Location: /questions/1
+
+## Questions Collection [/questions{?page}]
+
++ Parameters
+    + page (optional, number, `1`) ... The page of questions to return
+
+
+
+### Create a New Question [POST]
+
+You may create your own question using this action. It takes a JSON object containing a question and a collection of answers in the form of choices.
+
++ question (string) - The question
++ choices (array[string]) - A collection of choices.
+
++ Request (application/json)
+
+            {
+                "question": "Favourite programming language?",
+                "choices": [
+                    "Swift",
+                    "Python",
+                    "Objective-C",
+                    "Ruby"
+                ]
+            }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /questions/2
+
+    + Body
+
                 {
-                    "OrganisationId": 123456,
-                    "OrganisationName": "British Airways",
-                    "OrganisationUrl": "http://dashboard.flightglobal.com",
-                    "AlertUrl": "http://pro.flightglobal.com",
-                    "Year": 2014,
-                    "Period": "Annual",
-                    "PublishedDate": "2014-10-30T00:00:00",
-                    "NaturalLanguage": "2014 Traffic updates posted by British Airways",
-                    "Enrichments": [
+                    "question": "Favourite programming language?",
+                    "published_at": "2014-11-11T08:40:51.620Z",
+                    "url": "/questions/2",
+                    "choices": [
                         {
-                            "TargetText":"British Airways",
-                            "OrganisationId":-456,
-                            "Iata":"BA",
-                            "Type":"Airline",
-                            "HasFleets":true,
-                            "HasRoutes":true,
-                            "HasMroData":true,
-                            "HasPersonnel":true,
-                            "HasOwnership":true,
-                            "HasAlliances":true,
-                            "HasTraffic":true,
-                            "HasFinancials":true,
-                            "HasAirlines":false,
-                            "HasAircraft":false,
-                            "HasCapabilities":false,
-                            "HasClients":false,
-                            "HasMemberFinancials":false,
-                            "HasMemberTraffic":false,
-                            "ContentIndices":[31]
+                            "choice": "Swift",
+                            "url": "/questions/2/choices/1",
+                            "votes": 0
+                        }, {
+                            "choice": "Python",
+                            "url": "/questions/2/choices/2",
+                            "votes": 0
+                        }, {
+                            "choice": "Objective-C",
+                            "url": "/questions/2/choices/3",
+                            "votes": 0
+                        }, {
+                            "choice": "Ruby",
+                            "url": "/questions/2/choices/4",
+                            "votes": 0
                         }
                     ]
                 }
-            ]
-        },
-        "NetworkAlerts": {
-            "Total": 94,
-            "Results": [
-                {
-                    "RegionId": 4,
-                    "Region": "Europe",
-                    "AlertType": "New Route",
-                    "RouteCount": 1,
-                    "CarrierCount": 1,
-                    "PublishedDate": "2014-07-31T00:00:00",
-                    "NaturalLanguage": "An Airline has announced a new route originating from Europe",
-                    "Enrichments": []
-                }
-            ]
-        }
-    }
-}
