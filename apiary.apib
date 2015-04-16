@@ -4,6 +4,73 @@ HOST: http://polls.apiblueprint.org/
 # Hammer API
 Hammer API
 
+# Group Jobs
+Notes related resources of the **Jobs API**
+
+## Jobs Collection [/jobs]
+### List all Jobs [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+                {
+                    "name": "googlejob",
+                    "schedule": "2014-11-11T08:40:51.620Z",
+                    "filters": [
+                        {
+                            "name": "CarriersInc",
+                            "value": "BA,DL",
+                        }
+                    ]
+                }
+            ]                
+                
+### Create [POST]
+
++ Request (application/json)
+
+            {
+                "name": "googlejob",
+                "schedule": "2014-11-11T08:40:51.620Z",
+                "filters": [
+                    {
+                        "name": "CarriersInc",
+                        "value": "BA,DL",
+                    }
+                ]
+            }
+
++ Response 201 (application/json)
+
+    + Body
+    
+        { "name" : "googlejob" }
+
+## Retrieve [/notes/{id}]
+A single Note object with all its details
+
++ Parameters
+    + id (required, number, `googlejob`) ... Unique Job Id
+
+### Retrieve a Note [GET]
++ Response 200 (application/json)
+
+    + Body
+
+            { "id": 2, "title": "Pick-up posters from post-office" }
+            
+
+
+### Remove a Note [DELETE]
++ Response 204
+
+
+
+
+
+
 ## Group Jobs
 A job contains the following information
 + names
